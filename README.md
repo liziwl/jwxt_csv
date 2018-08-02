@@ -2,7 +2,9 @@
 
 For SUSTech students to export their grade from "jwxt" into csv file. You can open csv file with MS Excel.
 
-[Download](https://github.com/liziwl/jwxt_csv/releases)
+[Windows Download](https://github.com/liziwl/jwxt_csv/releases)
+
+Other OS please use python3 to run.
 
 ## Usage
 
