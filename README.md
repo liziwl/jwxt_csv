@@ -8,6 +8,8 @@ Other OS please use python3 to run.
 
 ## Usage
 
+### Command
+
 ```
 usage: jwxt2csv.exe [-h] -u <Username> -p <Password>
 
@@ -20,6 +22,10 @@ optional arguments:
 ```
 
 * example: `jwxt2csv.exe -u 11510123 -p 123456`
+
+### Interactive
+
+Just input as program asked.
 
 ## Acknowledgment
 
