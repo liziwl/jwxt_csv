@@ -6,6 +6,12 @@ For SUSTech students to export their grade from "jwxt" into csv file. You can op
 
 Other OS please use python3 to run.
 
+## Dependence
+
+```
+pip install requests argparse py-getch lxml beautifulsoup4
+```
+
 ## Usage
 
 ### Command
