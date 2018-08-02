@@ -3,6 +3,7 @@ import re
 import sys
 import csv
 import argparse
+import getch
 
 from bs4 import BeautifulSoup
 from lxml.html.soupparser import unescape
@@ -10,15 +11,25 @@ from lxml.html.soupparser import unescape
 
 def parse_command_line():
     parser = argparse.ArgumentParser(description="jwxt-csv: Grade export tool")
-    parser.add_argument("-u", metavar="<Username>", dest="usr", type=int, required=True,
+    parser.add_argument("-u", metavar="<Username>", dest="usr", type=int, required=False,
                         help="CAS Username.")
 
-    parser.add_argument("-p", metavar="<Password>", dest="pwd", type=str, required=True,
+    parser.add_argument("-p", metavar="<Password>", dest="pwd", type=str, required=False,
                         help="CAS password.")
 
     args = parser.parse_args()
-    # print(args.usr, args.pwd)
+    if args.usr is None and args.pwd is None:
+        return interact_get_params()
+    elif args.usr is None or args.pwd is None:
+        print('Wrong arguments, please check them.')
+        sys.exit(1)
     return args.usr, args.pwd
+
+
+def interact_get_params():
+    usr = input("CAS Username: ")
+    pwd = input("CAS password: ")
+    return usr, pwd
 
 home = "http://jwxt.sustc.edu.cn/jsxsd/"
 grade_site = "http://jwxt.sustc.edu.cn/jsxsd/kscj/cjcx_list"
@@ -72,7 +83,7 @@ class SUSTech:
             print('##################################################################\n\n'
                   'Fail to log in! Please check the CAS username or password.\n\n'
                   '##################################################################\n')
-            sys.exit(1)
+            getch.pause_exit(1, 'Press Any Key To Exit.')
 
     def _get_home_page(self):
         r = self.s.get(self.site)
@@ -167,3 +178,4 @@ if __name__ == '__main__':
     print("##################################################################\n\n"
           "Successful output your grade at {}.\n\n"
           "##################################################################\n".format(file_name))
+    getch.pause_exit(0, 'Press Any Key To Exit.')
