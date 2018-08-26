@@ -7,6 +7,7 @@ import getch
 
 from bs4 import BeautifulSoup
 from lxml.html.soupparser import unescape
+from openpyxl import Workbook
 
 
 def parse_command_line():
@@ -31,8 +32,10 @@ def interact_get_params():
     pwd = input("CAS password: ")
     return usr, pwd
 
+
 home = "http://jwxt.sustc.edu.cn/jsxsd/"
 grade_site = "http://jwxt.sustc.edu.cn/jsxsd/kscj/cjcx_list"
+
 
 class SUSTech:
     """
@@ -140,6 +143,41 @@ def get_course_grade(tr):
     return data
 
 
+def dump_csv(file_name, header, data):
+    with open(file_name, "w", encoding="utf_8_sig", newline='') as f:
+        f_csv = csv.writer(f)
+        f_csv.writerow(header)
+        f_csv.writerows(data)
+
+
+def load_csv(file_name):
+    result = []
+    with open(file_name, "r", encoding="utf_8_sig") as f:
+        reader = csv.reader(f)
+        for item in reader:
+            result.append(item)
+    return result
+
+
+def try2digit(a):
+    for i in range(len(a)):
+        for j in range(len(a[i])):
+            try:
+                tmp = float(a[i][j])
+                a[i][j] = tmp
+                continue
+            except ValueError:
+                pass
+
+            try:
+                tmp = int(a[i][j])
+                a[i][j] = tmp
+                continue
+            except ValueError:
+                pass
+    return a
+
+
 if __name__ == '__main__':
     usr, pwd = parse_command_line()
     spider = SUSTech(usr, pwd, home)
@@ -160,6 +198,8 @@ if __name__ == '__main__':
             header.extend(content.split("/"))
         else:
             header.append(content)
+    ext = ['百分绩点', '等级绩点']
+    header.extend(ext)
     # print(header)
 
     # Get table data
@@ -168,14 +208,38 @@ if __name__ == '__main__':
         tmp = get_course_grade(trs[i])
         data.append(tmp)
         # print(tmp)
+    data = try2digit(data)
 
+    # Save as CSV
     file_name = "{}.csv".format(usr)
-    with open(file_name, "w", encoding="utf_8_sig", newline='') as f:
-        f_csv = csv.writer(f)
-        f_csv.writerow(header)
-        f_csv.writerows(data)
+    dump_csv(file_name, header, data)
+
+    # Save as xlsx
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Grade"
+    ws.append(header)
+    for d in data:
+        ws.append(d)
+
+    func1 = "=VLOOKUP(E{},'GPA lookup'!A:C,{},FALSE)"
+    func2 = "=G{}*M{}"
+
+    for i in range(2, len(data) + 2):
+        cell = 'M{}'.format(i)
+        ws[cell] = func1.format(i, 2)
+        cell = 'N{}'.format(i)
+        ws[cell] = func1.format(i, 3)
+
+    # LOOKUP table
+    ws2 = wb.create_sheet(title="GPA lookup")
+    lookup = load_csv('GPAlookup.csv')
+    lookup = try2digit(lookup)
+    for d in lookup:
+        ws2.append(d)
+    wb.save("{}.xlsx".format(usr))
 
     print("##################################################################\n\n"
-          "Successful output your grade at {}.\n\n"
-          "##################################################################\n".format(file_name))
+          "Successful output your grade at {}.csv and {}.xlsx.\n\n"
+          "##################################################################\n".format(usr, usr))
     getch.pause_exit(0, 'Press Any Key To Exit.')
