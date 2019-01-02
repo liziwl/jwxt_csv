@@ -131,15 +131,7 @@ def get_course_grade(tr):
     soup = tr.find_all('td')
     data = list()
     for i in range(len(soup)):
-        if i != 4:
-            data.append(soup[i].get_text())
-        else:
-            grade_in_100 = soup[i].find_all('a')[0]['href']
-            formula = '.*?&zcj=(.*?)\'.*?'
-            pattern = re.compile(formula)
-            grade100 = re.findall(pattern, grade_in_100)[0]
-            data.append(grade100)
-            data.append(soup[i].get_text().strip())
+        data.append(soup[i].get_text())
     return data
 
 
@@ -198,8 +190,6 @@ if __name__ == '__main__':
             header.extend(content.split("/"))
         else:
             header.append(content)
-    ext = ['百分绩点', '等级绩点']
-    header.extend(ext)
     # print(header)
 
     # Get table data
@@ -222,7 +212,7 @@ if __name__ == '__main__':
     for d in data:
         ws.append(d)
 
-    func1 = "=VLOOKUP(E{},'GPA lookup'!A:C,{},FALSE)"
+    func1 = "=VLOOKUP(F{},'GPA lookup'!A:C,{},FALSE)"
     func2 = "=G{}*M{}"
 
     for i in range(2, len(data) + 2):
