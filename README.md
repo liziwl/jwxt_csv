@@ -9,7 +9,7 @@ Other OS please use python3 to run.
 ## Dependence
 
 ```
-pip install requests argparse py-getch lxml beautifulsoup4
+pip install requests argparse py-getch lxml beautifulsoup4 openpyxl
 ```
 
 ## Usage
