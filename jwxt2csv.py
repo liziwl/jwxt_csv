@@ -4,6 +4,7 @@ import sys
 import csv
 import argparse
 import getch
+import os
 
 from bs4 import BeautifulSoup
 from lxml.html.soupparser import unescape
@@ -170,6 +171,17 @@ def try2digit(a):
     return a
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 if __name__ == '__main__':
     usr, pwd = parse_command_line()
     spider = SUSTech(usr, pwd, home)
@@ -223,7 +235,7 @@ if __name__ == '__main__':
 
     # LOOKUP table
     ws2 = wb.create_sheet(title="GPA lookup")
-    lookup = load_csv('GPAlookup.csv')
+    lookup = load_csv(resource_path('./GPAlookup.csv'))
     lookup = try2digit(lookup)
     for d in lookup:
         ws2.append(d)

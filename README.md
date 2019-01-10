@@ -8,7 +8,7 @@ Other OS please use python3 to run.
 
 ## Dependence
 
-```
+```bash
 pip install requests argparse py-getch lxml beautifulsoup4 openpyxl
 ```
 
@@ -32,6 +32,23 @@ optional arguments:
 ### Interactive
 
 Just input as program asked.
+
+## To exe
+
+### CMD
+
+```bash
+pip install pyinstaller
+pyinstaller -y -F --add-data "D:/All-code/jwxt_csv/GPAlookup.csv";"." "D:/All-code/jwxt_csv/jwxt2csv.py"
+```
+
+### GUI
+
+```bash
+pip install auto-py-to-exe
+```
+
+![](./gui.png)
 
 ## Acknowledgment
 
