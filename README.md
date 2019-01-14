@@ -4,7 +4,7 @@ For SUSTech students to export their grade from "jwxt" into csv file. You can op
 
 [Windows Download](https://github.com/liziwl/jwxt_csv/releases)
 
-Other OS please use python3 to run.
+Other OS please use **Python3.6** to run.
 
 ## Dependence
 
@@ -48,7 +48,7 @@ pyinstaller -y -F --add-data "D:/All-code/jwxt_csv/GPAlookup.csv";"." "D:/All-co
 pip install auto-py-to-exe
 ```
 
-![](./gui.png)
+<img src="./gui.png" width="600"/>
 
 ## Acknowledgment
 
